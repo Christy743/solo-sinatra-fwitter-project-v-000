@@ -1,17 +1,12 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Fwitter</title>
-  </head>
-  <body>
-
     <h3>Tweets</h3>
+    <h3>Welcome, <%= current_user.username %></h3>
 
+    <% if logged_in? %>
 <ul>
   <% @tweets.each_with_index do |tweet, i| %>
-    <li> <%= i + 1 %>, <a href="/tweets/<%= tweet.id %>"><%= tweet.content %></a></li>
+    <li> <%= i + 1 %>, <a href="/tweets/<%= tweet.content %>"><%= tweet.content %></a></li>
   <% end %>
 </ul>
+  <% end %>
 
-  </body>
-</html>
+    <p>Not signed in? Please <a href="/login">Sign In</a></p>

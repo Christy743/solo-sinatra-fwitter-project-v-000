@@ -9,7 +9,7 @@ class UsersController < ApplicationController
   end
 
   get '/signup' do
-    if !session[:user_id]
+    if !logged_in?
       flash[:message] = "Please sign up before signing in."
       erb :'users/create_user'
     else
@@ -18,15 +18,14 @@ class UsersController < ApplicationController
   end
 
   post '/signup' do
-    if params[:username] == "" || params[:email] == "" || params[:password] == ""
-      redirect '/signup'
-    else
       @user = User.new(:username => params[:username], :email => params[:email], :password => params[:password])
-      @user.save
-      session[:user_id] = @user.id
-      redirect to '/tweets'
-    end
-  end
+      if @user.save
+       session[:user_id] = @user.id
+       redirect to '/tweets'
+     else
+       redirect to '/signup'
+     end
+   end
 
   get "/login" do
     if !logged_in?
@@ -43,17 +42,13 @@ class UsersController < ApplicationController
       session[:user_id] = @user.id
       redirect to "/tweets"
     else
-      redirect to "/signup"
+      redirect to "/login"
     end
   end
 
   get '/logout' do
-    if session[:user_id] != nil
-      session.destroy
+      session.clear
       redirect to '/login'
-    else
-      redirect "/"
-    end
   end
 
 end

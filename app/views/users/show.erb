@@ -1,15 +1,16 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>title</title>
-  </head>
-  <body>
-    <% if Helpers.is_logged_in?(session) %>
-      <h1>Welcome <%= Helpers.current_user(session).username %></h1>
+<h3><%= @user.username %>Tweets</h3>
 
-
-      <a href="/sessions/logout">Log Out</a>
-    <% end %>
-
-  </body>
-</html>
+<% if @user.tweets.count == 0 %>
+  <p>There are no Tweets</p>
+<% else %>
+  <ul>
+    <% @user.tweets.each do |tweet| %>
+    <li><a href="/users/<%= tweet.user.slug %>"><%= tweet.user.username %></a>
+      <%= tweet.content %>
+      <% if current_user == tweet.user %>
+        <a href="/tweets/<%= tweet.id %>"></a>
+      <% end %>
+    </li>
+      <% end %>
+    </ul>
+      <% end %>
